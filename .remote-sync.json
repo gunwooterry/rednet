@@ -1,0 +1,16 @@
+{
+  "uploadOnSave": false,
+  "useAtomicWrites": false,
+  "deleteLocal": false,
+  "hostname": "oortcloud.iptime.org",
+  "port": "10070",
+  "ignore": [
+    ".remote-sync.json",
+    ".git/**"
+  ],
+  "username": "leechanghwan",
+  "password": "wlsemr96",
+  "watch": [],
+  "transport": "scp",
+  "target": "/home/leechanghwan/CS492/"
+}
