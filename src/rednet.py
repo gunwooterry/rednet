@@ -1,4 +1,3 @@
-from pymongo import MongoClient
 import tensorflow as tf
 import numpy as np
 import random
@@ -44,9 +43,9 @@ def shuffle2(x, y):
 def sample(num, x):
 	x_test = []
 	for i in range(num):
-		r = random.randrange(0, len(x_all))
-		x_test.append(x_all[r])
-		x_all.pop(r)
+		r = random.randrange(0, len(x))
+		x_test.append(x[r])
+		x.pop(r)
 	return x_test
 
 
@@ -60,6 +59,7 @@ def main():
 	total_rep = 10000
 	batch_size = 10
 	reg_term = 0
+	optimizer = tf.train.GradientDescentOptimizer(learning_rate)
 	print("Input Dimension: " + str(input_size))
 
 	x1 = tf.placeholder("float", [None, input_size])
@@ -78,8 +78,8 @@ def main():
 	o2 = tf.matmul(g2, v)
 	y = tf.sqrt(tf.reduce_sum(tf.square(tf.sub(o1, o2)), reduction_indices=1))
 	y_ = tf.placeholder("float", [None])
-	loss = tf.reduce_sum(tf.square(tf.sub(y, y_)))+reg_term*(tf.nn.l2_loss(w)+tf.nn.l2_loss(v)+tf.nn.l2_loss(b1))
-	train_step = tf.train.GradientDescentOptimizer(learning_rate).minimize(loss)
+	loss = tf.reduce_sum(tf.square(tf.sub(y, y_)))+reg_term*(tf.nn.l2_loss(w1)+tf.nn.l2_loss(w2)+tf.nn.l2_loss(v)+tf.nn.l2_loss(b1))
+	train_step = optimizer.minimize(loss)
 	init = tf.initialize_all_variables()
 
 	# saver = tf.train.Saver()
@@ -107,7 +107,7 @@ def main():
 
 	print("Training done")
 	print("%d repetitions, regularization = %d" % (total_rep, reg_term))
-	np.savetxt('../output/weights1.csv', show_variable(w))
+	np.savetxt('../output/weights1.csv', show_variable(w1))
 	np.savetxt('../output/weights2.csv', show_variable(w2))
 	np.savetxt('../output/weights3.csv', show_variable(v))
 	np.savetxt('../output/bias1.csv', show_variable(b1))
