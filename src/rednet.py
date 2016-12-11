@@ -102,7 +102,7 @@ def main():
 			x2_t.append(x_all[j])
 			y_t.append(np.linalg.norm(x1_-x2_))
 		sess.run(train_step, feed_dict={x1: x1_t, x2: x2_t, y_: y_t})
-		if rep % 1000 == 0 and rep != 0:
+		if rep % int(total_rep/10) == 0 and rep != 0:
 			print("%d / %d" % (rep, total_rep))
 
 	print("Training done")
