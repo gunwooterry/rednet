@@ -4,17 +4,17 @@ import random
 from random import shuffle
 
 
-def weight_variable(shape):
+def init_weight(shape):
 	initial = tf.truncated_normal(shape, stddev=0.1)
 	return tf.Variable(initial)
 
 
-def bias_variable(shape):
+def init_bias(shape):
 	initial = tf.constant(0.1, shape=shape)
 	return tf.Variable(initial)
 
 
-def show_variable(v):
+def show_var(v):
 	sess = tf.InteractiveSession()
 	v.initializer.run()
 	temp = v.eval()
@@ -22,14 +22,7 @@ def show_variable(v):
 	return temp
 
 
-def normalize(v):
-	norm = np.linalg.norm(v)
-	if norm == 0:
-		return v
-	return v/norm
-
-
-def shuffle2(x, y):
+def shuffle_two(x, y):
 	listx = []
 	listy = []
 	index = range(len(x))
@@ -64,11 +57,11 @@ def main():
 
 	x1 = tf.placeholder("float", [None, input_size])
 	x2 = tf.placeholder("float", [None, input_size])
-	w1 = weight_variable([input_size, layer1])
-	w2 = weight_variable([layer1, layer2])
-	v = weight_variable([layer2, output_size])
-	b1 = bias_variable([layer1])
-	b2 = bias_variable([layer2])
+	w1 = init_weight([input_size, layer1])
+	w2 = init_weight([layer1, layer2])
+	v = init_weight([layer2, output_size])
+	b1 = init_bias([layer1])
+	b2 = init_bias([layer2])
 
 	h1 = tf.nn.relu(tf.matmul(x1, w1)+b1)
 	h2 = tf.nn.relu(tf.matmul(x2, w1)+b1)
@@ -107,11 +100,11 @@ def main():
 
 	print("Training done")
 	print("%d repetitions, regularization = %d" % (total_rep, reg_term))
-	np.savetxt('../output/weights1.csv', show_variable(w1))
-	np.savetxt('../output/weights2.csv', show_variable(w2))
-	np.savetxt('../output/weights3.csv', show_variable(v))
-	np.savetxt('../output/bias1.csv', show_variable(b1))
-	np.savetxt('../output/bias2.csv', show_variable(b2))
+	np.savetxt('../output/weights1.csv', show_var(w1))
+	np.savetxt('../output/weights2.csv', show_var(w2))
+	np.savetxt('../output/weights3.csv', show_var(v))
+	np.savetxt('../output/bias1.csv', show_var(b1))
+	np.savetxt('../output/bias2.csv', show_var(b2))
 	np.savetxt('../output/dataY.csv', sess.run(o1, feed_dict={x1: x_all}), delimiter=',')
 
 
