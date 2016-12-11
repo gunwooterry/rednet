@@ -35,13 +35,6 @@ def shuffle2(x, y):
 		listy.append(y[i])
 	return listx, listy
 
-def jsonToTensorX(json, index):
-	data = json['data']
-	x_temp = np.zeros(260)
-	for j in data:
-		x_temp[index[j['BSSID']]] = np.float(1+(35+j['level'])/64.0)
-	return x_temp
-
 def takeTestSamples(num, x):
 	x_test = []
 	for i in range(num):
@@ -50,13 +43,15 @@ def takeTestSamples(num, x):
 		x_all.pop(r)
 	return x_test
 
-varI = len(BSSID)
+x_all = np.load("../input/dataX.npy")
+
+varI = x_all.shape[1]
 varO = 2
 var1 = 512
 var2 = 512
 K = 12
 
-print("Input Dim : "+str(len(BSSID)))
+print("Input Dim : " + str(varI))
 
 x1 = tf.placeholder("float", [None, varI])
 x2 = tf.placeholder("float", [None, varI])
@@ -89,7 +84,7 @@ print("Sample constructed")
 #sample_size = 5000
 #x_all = takeTestSamples(sample_size, x_all)
 
-sample_size = len(x_all)
+sample_size = x_all.shape[0]
 
 total_rep = 10000
 for rep in range(total_rep):
@@ -115,9 +110,9 @@ for rep in range(total_rep):
 print("Training done")
 print("rep%d-reg%f-s%d-h%d" % (total_rep, reg_term, sample_size, var1))
 print(sess.run(o1, feed_dict={x1: x_all}))
-np.savetxt('weights1.csv', showVariable(w))
-np.savetxt('weights2.csv', showVariable(w2))
-np.savetxt('weights3.csv', showVariable(v))
-np.savetxt('bias1.csv', showVariable(b1))
-np.savetxt('bias2.csv', showVariable(b2))
-np.savetxt('dataY.csv', sess.run(o1, feed_dict={x1: x_all}), delimiter=',')
+np.savetxt('../output/weights1.csv', showVariable(w))
+np.savetxt('../output/weights2.csv', showVariable(w2))
+np.savetxt('../output/weights3.csv', showVariable(v))
+np.savetxt('../output/bias1.csv', showVariable(b1))
+np.savetxt('../output/bias2.csv', showVariable(b2))
+np.savetxt('../output/dataY.csv', sess.run(o1, feed_dict={x1: x_all}), delimiter=',')
