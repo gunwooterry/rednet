@@ -1,4 +1,4 @@
 input/
 output/
 .DS_Store
-.remote_sync.json
+.remote-sync.json
