@@ -42,12 +42,6 @@ def jsonToTensorX(json, index):
 		x_temp[index[j['BSSID']]] = np.float(1+(35+j['level'])/64.0)
 	return x_temp
 
-def jsonToTensorY(json, zones):
-	data = json['zone']
-	y_temp = np.zeros(28)
-	y_temp[zones[data]] = np.float(1)
-	return y_temp
-
 def takeTestSamples(num, x):
 	x_test = []
 	for i in range(num):
@@ -55,30 +49,6 @@ def takeTestSamples(num, x):
 		x_test.append(x_all[r])
 		x_all.pop(r)
 	return x_test
-
-client = MongoClient()
-db = client.test
-wifi = db.wifi
-BSSID = set()
-num = 0
-
-for i in wifi.find():
-	for j in i['data']:
-		BSSID.add(j['BSSID'])
-
-index = {}
-zones = {0: 0, 1: 1, 2: 2, 3: 3, 10: 4, 13: 5, 20: 6, 23: 7, 40: 8, 41: 9,
-		 42: 10, 43: 11, 50: 12, 53: 13, 60: 14, 63: 15, 70: 16, 71: 17,
-		 72: 18, 73: 19, 80: 20, 83: 21, 90: 22, 93: 23, 100: 24, 101: 25,
-		 102: 26, 103: 27}
-
-for i in range(len(BSSID)):
-	index[BSSID.pop()] = i
-
-for i in wifi.find():
-	for j in i['data']:
-		BSSID.add(j['BSSID'])
-		num += 1
 
 varI = len(BSSID)
 varO = 2
@@ -115,10 +85,6 @@ sess = tf.Session()
 sess.run(init)
 
 print("Sample constructed")
-
-x_all = []
-for i in wifi.find():
-	x_all.append(jsonToTensorX(i, index))
 
 #sample_size = 5000
 #x_all = takeTestSamples(sample_size, x_all)
