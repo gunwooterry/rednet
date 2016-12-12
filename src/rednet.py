@@ -44,8 +44,9 @@ def sample(num, x):
 
 def main():
 	x_all = np.load("../input/dataX.npy")
-	input_size = x_all.shape[1]
-	output_size = 2
+	length = x_all.shape[0]
+	input_dim = x_all.shape[1]
+	output_dim = 2
 	layer1 = 512
 	layer2 = 512
 	learning_rate = 1e-3
@@ -53,11 +54,11 @@ def main():
 	batch_size = 10
 	reg_term = 0
 	optimizer = tf.train.GradientDescentOptimizer(learning_rate)
-	print("Input Dimension: " + str(input_size))
+	print("Input Dimension: " + str(input_dim))
 
-	x1 = tf.placeholder("float", [None, input_size])
-	x2 = tf.placeholder("float", [None, input_size])
-	w1 = init_weight([input_size, layer1])
+	x1 = tf.placeholder("float", [None, input_dim])
+	x2 = tf.placeholder("float", [None, input_dim])
+	w1 = init_weight([input_dim, layer1])
 	w2 = init_weight([layer1, layer2])
 	v = init_weight([layer2, output_size])
 	b1 = init_bias([layer1])
@@ -85,8 +86,8 @@ def main():
 		x2_t = []
 		y_t = []
 		for _ in range(batch_size):
-			i = np.random.randint(0, input_size)
-			j = np.random.randint(0, input_size)
+			i = np.random.randint(0, length)
+			j = np.random.randint(0, length)
 			if i == j:
 				continue
 			x1_ = x_all[i]
