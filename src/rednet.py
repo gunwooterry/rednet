@@ -48,10 +48,10 @@ def main():
 	output_size = 2
 	layer1 = 512
 	layer2 = 512
-	learning_rate = 1e-5
+	learning_rate = 1e-4
 	total_rep = 10000
 	batch_size = 10
-	reg_term = 1e-5
+	reg_term = 0.001
 	optimizer = tf.train.GradientDescentOptimizer(learning_rate)
 	print("Input Dimension: " + str(input_size))
 
@@ -80,6 +80,7 @@ def main():
 	sess.run(init)
 	print("Sample constructed")
 
+	loss_tracker = []
 	for rep in range(total_rep):
 		x1_t = []
 		x2_t = []
@@ -95,11 +96,13 @@ def main():
 			x2_t.append(x_all[j])
 			y_t.append(np.linalg.norm(x1_-x2_))
 		sess.run(train_step, feed_dict={x1: x1_t, x2: x2_t, y_: y_t})
+		loss_tracker.append(loss)
 		if rep % int(total_rep/10) == 0 and rep != 0:
 			print("%d / %d" % (rep, total_rep))
 
 	print("Training done")
 	print("%d repetitions, regularization = %d" % (total_rep, reg_term))
+	np.savetxt('../output/loss.csv', loss_tracker)
 	np.savetxt('../output/weights1.csv', show_var(w1))
 	np.savetxt('../output/weights2.csv', show_var(w2))
 	np.savetxt('../output/weights3.csv', show_var(v))
