@@ -49,7 +49,7 @@ def main():
 	layer1 = 512
 	layer2 = 512
 	learning_rate = 1e-3
-	total_rep = 10000
+	total_rep = 40000
 	batch_size = 10
 	reg_term = 0
 	optimizer = tf.train.GradientDescentOptimizer(learning_rate)
