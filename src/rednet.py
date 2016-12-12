@@ -100,11 +100,11 @@ def main():
 
 	print("Training done")
 	print("%d repetitions, regularization = %d" % (total_rep, reg_term))
-	np.savetxt('../output/weights1.csv', show_var(w1))
-	np.savetxt('../output/weights2.csv', show_var(w2))
-	np.savetxt('../output/weights3.csv', show_var(v))
-	np.savetxt('../output/bias1.csv', show_var(b1))
-	np.savetxt('../output/bias2.csv', show_var(b2))
+	np.savetxt('../output/weights1.csv', show_var(w1), delimiter=',)
+	np.savetxt('../output/weights2.csv', show_var(w2), delimiter=',)
+	np.savetxt('../output/weights3.csv', show_var(v), delimiter=',)
+	np.savetxt('../output/bias1.csv', show_var(b1), delimiter=',)
+	np.savetxt('../output/bias2.csv', show_var(b2), delimiter=',)
 	np.savetxt('../output/dataY.csv', sess.run(o1, feed_dict={x1: x_all}), delimiter=',')
 
 
