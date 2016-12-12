@@ -49,7 +49,7 @@ def main():
 	layer1 = 512
 	layer2 = 512
 	learning_rate = 1e-4
-	total_rep = 10000
+	total_rep = 30000
 	batch_size = 10
 	reg_term = 0.001
 	optimizer = tf.train.GradientDescentOptimizer(learning_rate)
@@ -80,7 +80,7 @@ def main():
 	sess.run(init)
 	print("Sample constructed")
 
-	loss_tracker = []
+	loss_tracker = np.zeros(shape=(total_rep,))
 	for rep in range(total_rep):
 		x1_t = []
 		x2_t = []
@@ -96,7 +96,7 @@ def main():
 			x2_t.append(x_all[j])
 			y_t.append(np.linalg.norm(x1_-x2_))
 		sess.run(train_step, feed_dict={x1: x1_t, x2: x2_t, y_: y_t})
-		loss_tracker.append(loss)
+		loss_tracker[(rep, 0)] = loss
 		if rep % int(total_rep/10) == 0 and rep != 0:
 			print("%d / %d" % (rep, total_rep))
 
