@@ -48,9 +48,9 @@ def main():
 	output_size = 2
 	layer1 = 512
 	layer2 = 512
-	learning_rate = 1e-3
-	total_rep = 10000
-	batch_size = 10
+	learning_rate = 1e-4
+	total_rep = 1000
+	batch_size = 20
 	reg_term = 0
 	optimizer = tf.train.GradientDescentOptimizer(learning_rate)
 	print("Input Dimension: " + str(input_size))
@@ -85,10 +85,8 @@ def main():
 		x2_t = []
 		y_t = []
 		for _ in range(batch_size):
-			i = np.random.randint(0, input_size)
-			j = np.random.randint(0, input_size)
-			if i == j:
-				continue
+			i = np.random.randint(0, x_all.shape[0])
+			j = np.random.randint(0, x_all.shape[0])
 			x1_ = x_all[i]
 			x2_ = x_all[j]
 			x1_t.append(x_all[i])
@@ -96,15 +94,20 @@ def main():
 			y_t.append(np.linalg.norm(x1_-x2_))
 		sess.run(train_step, feed_dict={x1: x1_t, x2: x2_t, y_: y_t})
 		if rep % int(total_rep/10) == 0 and rep != 0:
+			np.savetxt('../output/dataY_%d.csv' % rep, sess.run(o1, feed_dict={x1: x_all}), delimiter=',')
+			np.savetxt('../output/weights1_%d.csv' % rep, show_var(w1), delimiter=',')
+			np.savetxt('../output/weights2_%d.csv' % rep, show_var(w2), delimiter=',')
+			np.savetxt('../output/weights3_%d.csv' % rep, show_var(v), delimiter=',')
+			np.savetxt('../output/dataY.csv', sess.run(o1, feed_dict={x1: x_all}), delimiter=',')
 			print("%d / %d" % (rep, total_rep))
 
 	print("Training done")
 	print("%d repetitions, regularization = %d" % (total_rep, reg_term))
-	np.savetxt('../output/weights1.csv', show_var(w1), delimiter=',)
-	np.savetxt('../output/weights2.csv', show_var(w2), delimiter=',)
-	np.savetxt('../output/weights3.csv', show_var(v), delimiter=',)
-	np.savetxt('../output/bias1.csv', show_var(b1), delimiter=',)
-	np.savetxt('../output/bias2.csv', show_var(b2), delimiter=',)
+	np.savetxt('../output/weights1.csv', show_var(w1), delimiter=',')
+	np.savetxt('../output/weights2.csv', show_var(w2), delimiter=',')
+	np.savetxt('../output/weights3.csv', show_var(v), delimiter=',')
+	np.savetxt('../output/bias1.csv', show_var(b1), delimiter=',')
+	np.savetxt('../output/bias2.csv', show_var(b2), delimiter=',')
 	np.savetxt('../output/dataY.csv', sess.run(o1, feed_dict={x1: x_all}), delimiter=',')
 
 
