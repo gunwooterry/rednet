@@ -78,7 +78,7 @@ def main():
     loss = tf.reduce_sum(tf.square(tf.sub(y, y_))) + \
            reg_term * (tf.nn.l2_loss(w1) + tf.nn.l2_loss(w2) + tf.nn.l2_loss(v) + tf.nn.l2_loss(b1))
     train_step = optimizer.minimize(loss)
-    init = tf.initialize_all_variables()
+    init = tf.global_variables_initializer()
 
     # saver = tf.train.Saver()
     sess = tf.Session()
